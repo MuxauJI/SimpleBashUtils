@@ -4,10 +4,10 @@ NAME=s21_grep
 
 all: clean s21_grep
 
-s21_cat:
+s21_grep:
 	$(CC) $(CFLAGS) $(NAME).c -o $(NAME)
 
 clean:
-	rm -rf *.o $(NAME)
+	rm -rf *.o $(NAME) *.log
 
 rebuild: clean all

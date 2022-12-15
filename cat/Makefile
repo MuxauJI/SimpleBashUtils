@@ -8,6 +8,6 @@ s21_cat:
 	$(CC) $(CFLAGS) $(NAME).c -o $(NAME)
 
 clean:
-	rm -rf *.o $(NAME)
+	rm -rf *.o $(NAME) *.log
 
 rebuild: clean all
