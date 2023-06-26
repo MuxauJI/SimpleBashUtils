@@ -1,23 +1,23 @@
 #include "s21_cat.h"
 
 int main(int argc, char **argv) {
-  struct s_flags flags = {argv[0], 0, 0, 0, 0, 0, 0, 1, NULL, 0,0};
+  struct s_flags flags = {argv[0], 0, 0, 0, 0, 0, 0, 1, NULL, 0, 0};
   struct s_files_list *temp = NULL;
 
   for (int i = 1; i < argc; i++) {
     if (argv[i][0] == '-' && argv[i][1] != '\0') {
       parse_flags(&flags, argv[i]);
     } else {
-        if (!flags.files) {
-            temp = add_file(flags.files, argv[i]);
-            if(temp == NULL) {
-                fprintf(stderr, "Error malloc in file-list.");
-                exit(1);
-            }
-            flags.files = temp;
-        } else {
-            temp = add_file(temp, argv[i]);
+      if (!flags.files) {
+        temp = add_file(flags.files, argv[i]);
+        if (temp == NULL) {
+          fprintf(stderr, "Error malloc in file-list.");
+          exit(1);
         }
+        flags.files = temp;
+      } else {
+        temp = add_file(temp, argv[i]);
+      }
     }
   }
 
@@ -35,21 +35,21 @@ int main(int argc, char **argv) {
 }
 
 struct s_files_list *add_file(struct s_files_list *head, char *file_name) {
-    struct s_files_list *new, *tmp;
-    new = malloc(sizeof(struct s_files_list) * 1);
-    if(new == NULL) {
-        return NULL;
+  struct s_files_list *new, *tmp;
+  new = malloc(sizeof(struct s_files_list) * 1);
+  if (new == NULL) {
+    return NULL;
+  }
+  new->file_name = file_name;
+  new->next = NULL;
+  if (head != NULL) {
+    tmp = head;
+    while (tmp->next != NULL) {
+      tmp->next = tmp;
     }
-    new->file_name = file_name;
-    new->next = NULL;
-    if (head != NULL) {
-        tmp = head;
-        while (tmp->next != NULL) {
-            tmp->next = tmp;
-        }
-        tmp->next = new;
-    }
-    return new;
+    tmp->next = new;
+  }
+  return new;
 }
 
 void parse_flags(struct s_flags *flags, char *flag) {
@@ -125,13 +125,13 @@ void output_result(char *file_name, struct s_flags *flags) {
       }
       if (flags->E_flag == 1) putchar('$');
       putchar('\n');
-        flags->line = 0;
+      flags->line = 0;
       continue;
     }
     if (flags->n_flag == 1 && flags->line == 0) {
       printf("%6d\t", flags->line_number++);
     }
-      flags->line = 1;
+    flags->line = 1;
     if (flags->v_flag == 1) {
       if (flags->T_flag == 0 && ch == '\t') {
         putchar(ch);
@@ -158,13 +158,13 @@ void output_result(char *file_name, struct s_flags *flags) {
         }
       }
     } else {
-        if (flags->T_flag == 1 && ch == '\t') {
-            printf("^I");
-        } else {
-            putchar(ch);
-        }
+      if (flags->T_flag == 1 && ch == '\t') {
+        printf("^I");
+      } else {
+        putchar(ch);
+      }
     }
-      flags->space = 0;
+    flags->space = 0;
   }
   if (fp != NULL) {
     fclose(fp);
